@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gemara Blitz Arena - Rabba vs Abaye NBA Showdown</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rubik:wght@700;900&family=Orbitron:wght@700;900&display=swap");
+      
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+      .font-hebrew {
+        font-family: 'Rubik', sans-serif;
+      }
+      .font-led {
+        font-family: 'Orbitron', monospace;
+      }
+      
+      @keyframes pop-in {
+        0% { transform: scale(0.95) translateY(10px); opacity: 0; }
+        100% { transform: scale(1) translateY(0); opacity: 1; }
+      }
+      .animate-pop-in {
+        animation: pop-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      /* Court Parquet Subtle Pattern */
+      .bg-parquet {
+        background-color: #0c0414;
+        background-image: 
+          linear-gradient(60deg, rgba(85, 37, 131, 0.15) 25%, transparent 25%), 
+          linear-gradient(120deg, rgba(85, 37, 131, 0.15) 25%, transparent 25%), 
+          linear-gradient(240deg, rgba(85, 37, 131, 0.15) 25%, transparent 25%), 
+          linear-gradient(300deg, rgba(85, 37, 131, 0.15) 25%, transparent 25%);
+        background-size: 40px 70px;
+      }
+
+      @keyframes net-wiggle {
+        0%, 100% { transform: scaleY(1) skewX(0deg); }
+        50% { transform: scaleY(1.3) skewX(10deg); }
+      }
+
+      @keyframes rim-violation {
+        0%, 100% { stroke: #ef4444; filter: drop-shadow(0 0 2px #ef4444); }
+        50% { stroke: #f87171; filter: drop-shadow(0 0 12px #ef4444); fill: rgba(239, 68, 68, 0.2); }
+      }
+
+      .animate-wiggle {
+        animation: net-wiggle 0.35s ease-in-out;
+      }
+
+      .animate-violation {
+        animation: rim-violation 0.2s ease-in-out infinite;
+      }
+
+      /* Gold fire hot streak */
+      @keyframes gold-fire {
+        0%, 100% { box-shadow: 0 0 10px rgba(253, 185, 39, 0.2); border-color: rgba(253, 185, 39, 0.3); }
+        50% { box-shadow: 0 0 25px rgba(253, 185, 39, 0.7); border-color: rgba(253, 185, 39, 0.8); }
+      }
+      .streak-gold-fire {
+        animation: gold-fire 1s infinite ease-in-out;
+      }
+
+      /* Custom scrollbar for game breakdown */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(15, 23, 42, 0.6);
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #552583;
+        border-radius: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #FDB927;
+      }
+    </style>
+  </head>
+  <body class="bg-parquet text-slate-100 min-h-screen flex flex-col justify-between overflow-x-hidden selection:bg-[#FDB927] selection:text-[#552583]">
+    
+    <!-- Arena Header -->
+    <header class="w-full max-w-5xl mx-auto px-6 pt-6 flex justify-between items-center z-10">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#552583] to-[#7a3cae] flex items-center justify-center shadow-lg shadow-[#552583]/40 border border-[#FDB927]/30">
+          <span class="text-2xl">🏀</span>
+        </div>
+        <div>
+          <h1 class="text-xl font-black tracking-wider text-[#FDB927] flex items-center gap-2">
+            RABBA VS ABAYE <span class="text-xs bg-red-600 text-white px-2 py-0.5 rounded font-mono">NBA SHOT-CLOCK BLITZ</span>
+          </h1>
+          <p class="text-[10px] font-black text-purple-300 uppercase tracking-[0.2em]">Eilu Metziot • Pages 6, 7 & 21b</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-3">
+        <!-- Sound Toggle -->
+        <button onclick="toggleMute()" id="mute-btn" class="w-11 h-11 rounded-xl bg-slate-900/90 border border-purple-900/50 flex items-center justify-center hover:bg-[#552583] hover:border-[#FDB927] transition-all text-slate-300 shadow-md">
+          🔊
+        </button>
+        <span class="text-xs bg-slate-900/90 border border-purple-900/50 px-4 py-2 rounded-xl font-extrabold text-purple-200 shadow-md font-led">
+          SHOT CLOCK: <span class="text-[#FDB927]">5.0s</span>
+        </span>
+      </div>
+    </header>
+
+    <!-- Main Game Court -->
+    <main class="w-full max-w-3xl mx-auto px-4 py-6 flex-1 flex flex-col justify-center">
+      <div id="game-card" class="bg-slate-950/85 border-2 border-[#552583] rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl min-h-[580px] flex flex-col justify-between shadow-[#552583]/20 animate-pop-in">
+        <!-- Dynamic Jumbotron loads welcome screen, gameplay, or scoreboard -->
+      </div>
+    </main>
+
+    <!-- Stadium Keyboard Help -->
+    <footer class="w-full max-w-lg mx-auto px-6 pb-6 text-center text-[10px] text-purple-400 font-extrabold tracking-widest uppercase">
+      <div class="hidden md:flex justify-center items-center gap-6">
+        <span>Staples Hardwood Binds:</span>
+        <span class="flex items-center gap-1"><kbd class="bg-slate-900 border border-purple-950 px-2.5 py-1 rounded text-slate-400">←</kbd> or <kbd class="bg-slate-900 border border-purple-950 px-2.5 py-1 rounded text-slate-400">F</kbd> for FALSE</span>
+        <span class="flex items-center gap-1"><kbd class="bg-slate-900 border border-purple-950 px-2.5 py-1 rounded text-slate-400">→</kbd> or <kbd class="bg-slate-900 border border-purple-950 px-2.5 py-1 rounded text-slate-400">T</kbd> for TRUE</span>
+      </div>
+    </footer>
+
+    <script>
+      // Consolidated Vocabulary Dataset from Doc & existing files (duplicates resolved)
+      const vocabulary = [
+        // Page 6 Baseline
+        { hebrew: "בִּשְׁלָמָא", english: "Literal Meaning: In Peace (beshalom). Usual Uses: Granted, It makes sense.", page: 6 },
+        { hebrew: "רֵישָׁא", english: "First part of a Mishnah, Beginning.", page: 6 },
+        { hebrew: "סֵיפָא", english: "Last part of a Mishnah, End.", page: 6 },
+        { hebrew: "נְתַר", english: "To fall / drop.", page: 6 },
+        { hebrew: "דְּקָתָנֵי", english: "As it teaches.", page: 6 },
+        { hebrew: "שָׁאנֵי", english: "Different.", page: 6 },
+        { hebrew: "הוֹאִיל", english: "Since.", page: 6 },
+        { hebrew: "מוֹכִיחַ", english: "Proves, Decides.", page: 6 },
+        { hebrew: "אִי הָכִי", english: "If so.", page: 6 },
+        { hebrew: "נִמְאֶסֶת", english: "Becomes disgusting (gross).", page: 6 },
+        
+        // Page 7 Baseline
+        { hebrew: "רַאֲיָה", english: "Proof, Evidence.", page: 7 },
+        { hebrew: "תירוץ", english: "An Answer (to a Kushya).", page: 7 },
+        { hebrew: "קַשְׁיָא", english: "Difficulty, Contradiction, Unanswerable Objection.", page: 7 },
+        { hebrew: "קוּשְׁיָא", english: "Hard question/objection. Explanation: A קוּשְׁיָא is a question that is meant to refute something.", page: 7 },
+        { hebrew: "שאלה", english: "Easy Question. A שאלה is an inquiry into an unknown / asking for a piece of information.", page: 7 },
+        { hebrew: "נָּטַל", english: "To Take.", page: 7 },
+        { hebrew: "חָזֵי", english: "To see.", page: 7 },
+        { hebrew: "גַּזְלָן", english: "Robber.", page: 7 },
+        { hebrew: "גַּנָּב", english: "Thief.", page: 7 },
+        { hebrew: "תַּרְגְּמַהּ", english: "Interpreted it.", page: 7 },
+
+        // Section 1 of Doc (Page 21b)
+        { hebrew: "איתמר", english: "Meaning: It was stated. Use: Introduces debates/statements, usually from Amoraim.", page: "21b" },
+        { hebrew: "דעת", english: "Knowledge, Awareness.", page: "21b" },
+        { hebrew: "כולי עלמא", english: "Everyone.", page: "21b" },
+        { hebrew: "פליגי", english: "Disagrees.", page: "21b" },
+        { hebrew: "אף על גב", english: "Even though.", page: "21b" },
+        { hebrew: "בְּגַוֵּיהּ", english: "On him or On it.", page: "21b" },
+        { hebrew: "יָהֵבְנָא", english: "I will give.", page: "21b" },
+        { hebrew: "בְּזוּטוֹ שֶׁל יָם", english: "By the tides of the sea.", page: "21b" },
+        { hebrew: "בִשְׁלוּלִיתוֹ שֶׁל נָהָר", english: "By the flooding of a river.", page: "21b" },
+        { hebrew: "רַחֲמָנָא", english: "Meaning: The Merciful One (Hashem). Often Used as: The Torah.", page: "21b" },
+        { hebrew: "שַׁרְיֵיהּ", english: "Permitted it.", page: "21b" },
+        { hebrew: "ש.ר.י", english: "Allows or Permits.", page: "21b" },
+
+        // Section 2 of Doc
+        { hebrew: "מִינֵּיהּ", english: "From him or From it.", page: "21b" },
+        { hebrew: "אִית", english: "There is (יש).", page: "21b" },
+        { hebrew: "לֵית", english: "There is not (אין).", page: "21b" },
+        { hebrew: "הַשְׁתָּא", english: "Now.", page: "21b" },
+        { hebrew: "לקמן", english: "Below, Later.", page: "21b" },
+        { hebrew: "לעיל", english: "Above, Earlier.", page: "21b" },
+        { hebrew: "תָּא שְׁמַע", english: "Meaning: “Come and Hear”. Use: Introduces a Tannaic source to prove one side of an argument.", page: "21b" },
+        { hebrew: "הָתָם", english: "There.", page: "21b" },
+        { hebrew: "כִיס", english: "Purse, Pouch (as in ‘money pouch’), Bag.", page: "21b" },
+        { hebrew: "הָכָא נָמֵי", english: "Here also.", page: "21b" },
+        { hebrew: "הָכָא", english: "Here.", page: "21b" },
+
+        // Section 3 of Doc
+        { hebrew: "אַגַּב", english: "Literally: on the back / on top of. Often Used 1: on the basis of / since. Often Used 2: by the way / incidentally.", page: "21b" },
+        { hebrew: "יַקִּירֵ", english: "Heavy, Honorable, Precious / Rare.", page: "21b" },
+        { hebrew: "הָתָם נָמֵי", english: "There also.", page: "21b" },
+        { hebrew: "לְמַשְׁמֵשׁ", english: "To feel, To examine / search.", page: "21b" },
+        { hebrew: "סָבֵי", english: "Elderly.", page: "21b" },
+        { hebrew: "א.ז.ל", english: "To leave, To go.", page: "21b" },
+        { hebrew: "בָּתַר", english: "After, Behind.", page: "21b" },
+
+        // Section 4 of Doc
+        { hebrew: "בַּעַל", english: "Owner, Master, Husband (בעלים).", page: "21b" },
+        { hebrew: "לֶּקֶט (מצוה)", english: "Torah command: Leave grain that falls to the ground during harvest for the poor.", page: "21b" },
+        { hebrew: "לָקַט (verb)", english: "To Gather, To Pick.", page: "21b" },
+        { hebrew: "נְהִי", english: "Granted.", page: "21b" },
+        { hebrew: "אִיכָּא", english: "There is / There are.", page: "21b" },
+        { hebrew: "לֵיכָּא", english: "There is not / There are not.", page: "21b" },
+        { hebrew: "דוּכְתָּא", english: "Place.", page: "21b" },
+        { hebrew: "אַחְרִיתָא", english: "Another.", page: "21b" },
+        { hebrew: "מֵעִיקָּרָא", english: "Originally, At First.", page: "21b" },
+
+        // Section 5 of Doc
+        { hebrew: "שָׂדֶה", english: "Field.", page: "21b" },
+        { hebrew: "תְּאֵנָה", english: "Fig.", page: "21b" },
+        { hebrew: "נוֹטֶה", english: "Inclined, Bent.", page: "21b" },
+        { hebrew: "גָּזֵל", english: "Robbery.", page: "21b" },
+        { hebrew: "פטור", english: "Exempt.", page: "21b" },
+        { hebrew: "אֲפִילּוּ", english: "Even.", page: "21b" },
+        { hebrew: "צַד", english: "Side, Border.", page: "21b" },
+        { hebrew: "תַּחְתֶּיהָ", english: "Under it.", page: "21b" },
+        { hebrew: "מַּעֲשֵׂר", english: "Tithe.", page: "21b" },
+        { hebrew: "זַיִת", english: "Olive.", page: "21b" },
+        { hebrew: "חָרוּב", english: "Carobs (fruit).", page: "21b" },
+
+        // Section 8 of Doc
+        { hebrew: "לִסְטִים", english: "Bandits.", page: "21b" },
+        { hebrew: "מְזוּיָּן", english: "Armed.", page: "21b" },
+        { hebrew: "תְּרֵי", english: "Two.", page: "21b" },
+        { hebrew: "גַּוְונֵי", english: "Types or Kinds.", page: "21b" },
+        { hebrew: "שָׁטַף", english: "Washed away.", page: "21b" },
+        { hebrew: "קוֹרָיו", english: "His beams.", page: "21b" },
+        { hebrew: "עֵצָיו", english: "His wood.", page: "21b" },
+        { hebrew: "אֲבָנָיו", english: "His stones.", page: "21b" },
+        { hebrew: "סְתָמָא", english: "In a regular case.", page: "21b" },
+        { hebrew: "לְהַצִּיל", english: "To save.", page: "21b" },
+
+        // Section 9 of Doc
+        { hebrew: "אֵימָא סֵיפָא", english: "Literally: Say the seifa. Used: Consider what it says in the Seifa.", page: "21b" },
+        { hebrew: "לרדוף", english: "To chase.", page: "21b" },
+        { hebrew: "מַאי אִרְיָא", english: "Why single out.", page: "21b" },
+        { hebrew: "דְּחָק", english: "With difficulty, Under pressure, Emergency.", page: "21b" },
+        { hebrew: "דיוק", english: "Inference.", page: "21b" },
+        { hebrew: "שיטה", english: "Opinion.", page: "21b" },
+        { hebrew: "הַתּוֹרֵם", english: "One who separates, A donor.", page: "21b" },
+        { hebrew: "תְּרוּמָה", english: "Agricultural portion separated and given to the Priest. Generous (2.5%), Normal (2%), Stingy (1.6%).", page: "21b" },
+        { hebrew: "להרים", english: "To lift, To pick up, To raise.", page: "21b" },
+
+        // Section 10 of Doc
+        { hebrew: "שֶׁלֹּא בִּרְשׁוּת", english: "Without permission.", page: "21b" },
+        { hebrew: "אִם חוֹשֵׁשׁ", english: "If he is concerned (or worried).", page: "21b" },
+        { hebrew: "וּמִנַּיִן", english: "And from where.", page: "21b" },
+        { hebrew: "כְּלָךְ אֵצֶל יָפוֹת", english: "“You should have gone to the better” (grade of produce).", page: "21b" },
+        { hebrew: "וְהוֹסִיפוּ", english: "And added.", page: "21b" },
+        { hebrew: "בֵּין כָּךְ וּבֵין כָּךְ", english: "Either way.", page: "21b" },
+        { hebrew: "בְּעִידָּנָא", english: "At the time.", page: "21b" },
+
+        // Section 11 of Doc
+        { hebrew: "דְּשַׁוְּיֵהּ שָׁלִיחַ", english: "That he appointed him as an agent.", page: "21b" },
+        { hebrew: "הָכִי נָמֵי מִסְתַּבְּרָא", english: "So too, this seems more logical.", page: "21b" },
+        { hebrew: "אַלִּיבָּא", english: "According to the opinion.", page: "21b" },
+        { hebrew: "דְּאִי סָלְקָא דַעְתָּךְ", english: "Because if you should think.", page: "21b" },
+        { hebrew: "מִי הָוְיָא", english: "Would it be.", page: "21b" },
+        { hebrew: "לְרַבּוֹת", english: "To include.", page: "21b" },
+        { hebrew: "מֵהָנֵי", english: "From these.", page: "21b" },
+        { hebrew: "וּסְתָמֵיהּ", english: "And his regular way, Ordinarily.", page: "21b" },
+        { hebrew: "מִבֵּינוֹנִית", english: "From average (grade of produce).", page: "21b" }
+      ];
+
+      // Commentator Voice Phrases in heavy Ashkenazic Accent
+      const commentaries = {
+        dribbling: [
+          "Look at Rabba move! Driving like he's late for Ne'ilah!",
+          "His dribbling is so pshat, oy, it's absolutely beautiful!",
+          "Abaye is trying to guard him like a difficult Ramban!",
+          "Rabba drives hard... oy, vus a gishmake crossover!",
+          "The tzitzis are flying! Rabba has got the defense in a kasha!"
+        ],
+        swish: [
+          "GEVALD!!! Rabba just dunked oyf Abaye! What a complete poster!",
+          "OY! He put him in a cheirem with that slam! Unbelievable!",
+          "Rabba rises like a groisser tzaddik and slams it down! Abaye is completely flat on the parquet!",
+          "A gants groisser dunk! The whole backboard is shaking like a lulav!",
+          "Abaye got posterized! He needs a rishon to explain what just happened to him!",
+          "He took him to school! Direct to the Volozhin Yeshiva!"
+        ],
+        brick: [
+          "Oy vey! He clanked it! A kasha without a teretz!",
+          "The ball goes bouncing off the rim... vus a tsuris!",
+          "No bucket! That was a complete mishegass of a shot!",
+          "He rushed it! Like he wanted to finish Mincha in three minutes!"
+        ],
+        block: [
+          "BALOCKED!!! Abaye says: LO ALEICHA! Get that out of here!",
+          "Oy! Abaye swatted that straight back to the shtetl!",
+          "Abaye was standing there like a Shomer Shabbos, no entry!",
+          "What a block! Abaye learning the sugya of defense!"
+        ],
+        steal: [
+          "🚨 SHOT CLOCK VIOLATION! He was dreaming of Cholent and forgot the clock!",
+          "Oh, the tsuris! Abaye strips the ball clean, a complete turnover!",
+          "He got caught sleeping! Like a talmid in the back row during a long shiur!"
+        ]
+      };
+
+      // Web Audio Synthesizer (Real-time arena noise generation)
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      let isMuted = false;
+
+      const sounds = {
+        playTone(frequency, type, duration, gainStart, slideToFreq = null) {
+          if (isMuted) return;
+          try {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            osc.type = type;
+            osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+            
+            if (slideToFreq) {
+              osc.frequency.exponentialRampToValueAtTime(slideToFreq, audioCtx.currentTime + duration);
+            }
+            
+            gainNode.gain.setValueAtTime(gainStart, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+          } catch (e) {
+            console.warn("Audio Context blocked.");
+          }
+        },
+
+        playDribble() {
+          this.playTone(110, 'triangle', 0.15, 0.4, 40);
+        },
+
+        playSneakerSqueak() {
+          this.playTone(2800, 'sine', 0.08, 0.08, 3000);
+        },
+
+        playBlockSlap() {
+          this.playTone(220, 'sawtooth', 0.12, 0.6, 90);
+          this.playTone(850, 'sine', 0.1, 0.3);
+        },
+
+        playDunkSlam() {
+          this.playTone(60, 'sine', 0.5, 0.8, 20); 
+          this.playTone(180, 'sawtooth', 0.35, 0.5, 120); 
+          this.playTone(950, 'triangle', 0.25, 0.3); 
+          
+          const now = audioCtx.currentTime;
+          const bufferSize = audioCtx.sampleRate * 0.4;
+          const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+          }
+          const noise = audioCtx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = audioCtx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(1400, now);
+          filter.Q.setValueAtTime(4, now);
+          const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.5, now);
+          gain.gain.exponentialRampToValueAtTime(0.005, now + 0.35);
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+          noise.start(now);
+
+          setTimeout(() => this.playCheer(), 100);
+        },
+
+        playSwish() {
+          if (isMuted) return;
+          const now = audioCtx.currentTime;
+          const bufferSize = audioCtx.sampleRate * 0.3;
+          const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+          }
+          const noise = audioCtx.createBufferSource();
+          noise.buffer = buffer;
+
+          const filter = audioCtx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(1200, now);
+          filter.frequency.exponentialRampToValueAtTime(800, now + 0.2);
+          filter.Q.setValueAtTime(5, now);
+
+          const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.4, now);
+          gain.gain.exponentialRampToValueAtTime(0.005, now + 0.28);
+
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+          noise.start(now);
+
+          setTimeout(() => this.playCheer(), 150);
+        },
+
+        playClank() {
+          if (isMuted) return;
+          const now = audioCtx.currentTime;
+          const osc1 = audioCtx.createOscillator();
+          const osc2 = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          
+          osc1.type = 'triangle'; osc1.frequency.setValueAtTime(145, now);
+          osc2.type = 'sine'; osc2.frequency.setValueAtTime(320, now);
+          
+          gain.gain.setValueAtTime(0.5, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          
+          osc1.connect(gain); osc2.connect(gain); gain.connect(audioCtx.destination);
+          osc1.start(now); osc2.start(now);
+          osc1.stop(now + 0.25); osc2.stop(now + 0.25);
+
+          setTimeout(() => this.playGroan(), 200);
+        },
+
+        playCheer() {
+          if (isMuted) return;
+          const now = audioCtx.currentTime;
+          const bufferSize = audioCtx.sampleRate * 1.1;
+          const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+          }
+          const noise = audioCtx.createBufferSource();
+          noise.buffer = buffer;
+
+          const filter = audioCtx.createBiquadFilter();
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(500, now);
+          filter.frequency.exponentialRampToValueAtTime(950, now + 0.5);
+
+          const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 1.05);
+
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+          noise.start(now);
+        },
+
+        playGroan() {
+          if (isMuted) return;
+          const now = audioCtx.currentTime;
+          const bufferSize = audioCtx.sampleRate * 0.8;
+          const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+          }
+          const noise = audioCtx.createBufferSource();
+          noise.buffer = buffer;
+
+          const filter = audioCtx.createBiquadFilter();
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(220, now);
+
+          const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.75);
+
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+          noise.start(now);
+        },
+
+        playBuzzer() {
+          if (isMuted) return;
+          const now = audioCtx.currentTime;
+          const osc1 = audioCtx.createOscillator();
+          const osc2 = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          
+          osc1.type = 'sawtooth'; osc1.frequency.setValueAtTime(95, now);
+          osc2.type = 'sawtooth'; osc2.frequency.setValueAtTime(98, now);
+          
+          gain.gain.setValueAtTime(0.45, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 1.2);
+          
+          osc1.connect(gain); osc2.connect(gain); gain.connect(audioCtx.destination);
+          osc1.start(now); osc2.start(now);
+          osc1.stop(now + 1.2); osc2.stop(now + 1.2);
+          setTimeout(() => this.playGroan(), 500);
+        },
+
+        playWhistle() {
+          const now = audioCtx.currentTime;
+          const osc1 = audioCtx.createOscillator();
+          const osc2 = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          
+          osc1.type = 'sine'; osc1.frequency.setValueAtTime(2200, now);
+          osc2.type = 'sine'; osc2.frequency.setValueAtTime(2215, now); 
+          
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+          
+          osc1.connect(gain); osc2.connect(gain); gain.connect(audioCtx.destination);
+          osc1.start(now); osc2.start(now);
+          osc1.stop(now + 0.4); osc2.stop(now + 0.4);
+        },
+
+        playTick() {
+          this.playTone(880, 'sine', 0.05, 0.12);
+        },
+
+        playOrganCharge() {
+          if (isMuted) return;
+          const notes = [392.00, 392.00, 392.00, 523.25, 659.25, 783.99];
+          const timings = [0, 0.12, 0.24, 0.36, 0.48, 0.60];
+          const durations = [0.08, 0.08, 0.08, 0.12, 0.12, 0.55];
+          const now = audioCtx.currentTime;
+          
+          notes.forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + timings[idx]);
+            gain.gain.setValueAtTime(0.15, now + timings[idx]);
+            gain.gain.exponentialRampToValueAtTime(0.005, now + timings[idx] + durations[idx]);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + timings[idx]);
+            osc.stop(now + timings[idx] + durations[idx]);
+          });
+        }
+      };
+
+      // App state
+      let state = {
+        phase: 'welcome',
+        currentQuestion: null,
+        currentIndex: 0,
+        score: 0, 
+        streak: 0,
+        maxStreak: 0,
+        questionsList: [],
+        timeLeft: 5.0, 
+        reviewData: [],
+        
+        // Active court positions
+        playerX: 35,
+        defenderX: 110,
+        bballBounceY: 110,
+        isShooting: false,
+        shootOutcome: null, 
+        shootFrame: 0,
+        
+        // Timer mechanics
+        lastAnimationFrame: null,
+        lastTime: null,
+        dribbleTimer: 0,
+        squeakTimer: 0,
+        commentaryTimer: 0
+      };
+
+      function initApp() {
+        renderWelcomeScreen();
+        setupGlobalKeyListeners();
+      }
+
+      // Generate localized, mixed true/false gameplay matrices dynamically
+      function buildBlitzRounds() {
+        const rawPool = JSON.parse(JSON.stringify(vocabulary));
+        const shuffled = rawPool.sort(() => 0.5 - Math.random());
+        
+        return shuffled.map((item) => {
+          const isTrue = Math.random() < 0.5;
+          let shownEnglish = item.english;
+          
+          if (!isTrue) {
+            // Pick a completely different translation to serve as deceptive defense
+            let alternative = vocabulary[Math.floor(Math.random() * vocabulary.length)];
+            while (alternative.hebrew === item.hebrew) {
+              alternative = vocabulary[Math.floor(Math.random() * vocabulary.length)];
+            }
+            shownEnglish = alternative.english;
+          }
+          
+          return {
+            hebrew: item.hebrew,
+            correctEnglish: item.english,
+            shownEnglish: shownEnglish,
+            isTrue: isTrue,
+            page: item.page
+          };
+        });
+      }
+
+      function startBlitzGame() {
+        sounds.playOrganCharge();
+        state.phase = 'playing';
+        state.currentIndex = 0;
+        state.score = 0;
+        state.streak = 0;
+        state.maxStreak = 0;
+        state.questionsList = buildBlitzRounds();
+        state.reviewData = [];
+        loadQuestion(0);
+      }
+
+      function toggleMute() {
+        isMuted = !isMuted;
+        const muteBtn = document.getElementById('mute-btn');
+        if (muteBtn) {
+          muteBtn.innerText = isMuted ? "🔇" : "🔊";
+        }
+      }
+
+      function loadQuestion(index) {
+        if (index >= state.questionsList.length) {
+          endGame();
+          return;
+        }
+        state.currentIndex = index;
+        state.currentQuestion = state.questionsList[index];
+        state.timeLeft = 5.0;
+        state.playerX = 35;
+        state.defenderX = 110;
+        state.isShooting = false;
+        state.shootOutcome = null;
+        state.shootFrame = 0;
+        state.dribbleTimer = 0;
+        state.squeakTimer = Math.random() * 2 + 1;
+        state.commentaryTimer = 0;
+
+        renderQuestionScreen();
+        sounds.playWhistle(); 
+        updateCommentatorBox('dribbling');
+        
+        state.lastTime = performance.now();
+        if (state.lastAnimationFrame) cancelAnimationFrame(state.lastAnimationFrame);
+        state.lastAnimationFrame = requestAnimationFrame(gameLoop);
+      }
+
+      function gameLoop(now) {
+        if (state.phase !== 'playing') return;
+        
+        const delta = (now - state.lastTime) / 1000;
+        state.lastTime = now;
+
+        if (!state.isShooting) {
+          state.timeLeft -= delta;
+          if (state.timeLeft <= 0) {
+            state.timeLeft = 0;
+            updateTimerUI();
+            sounds.playBuzzer();
+            handleAnswerSubmission(null);
+            return;
+          }
+
+          const pct = 1 - (state.timeLeft / 5.0);
+          state.playerX = 35 + pct * 205; 
+          state.defenderX = state.playerX + 50 + Math.sin(Date.now() / 120) * 8; 
+
+          tickAudioAndVisuals(delta);
+          updateTimerUI();
+          updateCourtLiveGraphics();
+          
+          state.lastAnimationFrame = requestAnimationFrame(gameLoop);
+        }
+      }
+
+      function tickAudioAndVisuals(delta) {
+        state.dribbleTimer += delta;
+        const bounceCycle = (Date.now() / 150) % Math.PI;
+        state.bballBounceY = 104 + Math.abs(Math.sin(bounceCycle)) * 26;
+
+        if (state.bballBounceY >= 127 && state.dribbleTimer > 0.2) {
+          sounds.playDribble();
+          state.dribbleTimer = 0;
+          createCourtSparkParticle();
+        }
+
+        state.squeakTimer -= delta;
+        if (state.squeakTimer <= 0) {
+          sounds.playSneakerSqueak();
+          state.squeakTimer = Math.random() * 2.5 + 1.2;
+        }
+
+        if (state.timeLeft <= 2.0) {
+          const secondInt = Math.ceil(state.timeLeft);
+          if (!state.lastTickVal || state.lastTickVal !== secondInt) {
+            sounds.playTick();
+            state.lastTickVal = secondInt;
+          }
+        }
+
+        state.commentaryTimer += delta;
+        if (state.commentaryTimer >= 1.6) {
+          updateCommentatorBox('dribbling');
+          state.commentaryTimer = 0;
+        }
+      }
+
+      function createCourtSparkParticle() {
+        const sparks = document.getElementById('court-particles');
+        if (!sparks) return;
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', state.playerX + 16);
+        circle.setAttribute('cy', '133');
+        circle.setAttribute('r', '2');
+        circle.setAttribute('fill', '#FDB927');
+        circle.setAttribute('opacity', '0.8');
+        circle.style.transition = "all 0.3s ease-out";
+        sparks.appendChild(circle);
+        setTimeout(() => {
+          circle.setAttribute('r', '6');
+          circle.setAttribute('opacity', '0');
+        }, 10);
+        setTimeout(() => circle.remove(), 350);
+      }
+
+      function updateTimerUI() {
+        const bar = document.getElementById('timer-bar');
+        const num = document.getElementById('timer-num');
+        if (bar) {
+          const pct = (state.timeLeft / 5.0) * 100;
+          bar.style.width = `${pct}%`;
+          if (state.timeLeft <= 1.5) {
+            bar.classList.remove('bg-[#FDB927]');
+            bar.classList.add('bg-red-500');
+          } else {
+            bar.classList.remove('bg-red-500');
+            bar.classList.add('bg-[#FDB927]');
+          }
+        }
+        if (num) {
+          num.innerText = state.timeLeft.toFixed(1);
+        }
+      }
+
+      function updateCourtLiveGraphics() {
+        const playerG = document.getElementById('player-node');
+        const defenderG = document.getElementById('defender-node');
+        const bball = document.getElementById('bball-node');
+        
+        const bob = Math.sin(Date.now() / 85) * 4;
+        const defBob = Math.sin(Date.now() / 95) * 3;
+        
+        if (playerG) {
+          playerG.setAttribute('transform', `translate(${state.playerX}, ${bob})`);
+        }
+        if (defenderG) {
+          defenderG.setAttribute('transform', `translate(${state.defenderX}, ${defBob})`);
+        }
+        if (bball && !state.isShooting) {
+          bball.setAttribute('cx', state.playerX + 22);
+          bball.setAttribute('cy', state.bballBounceY + bob);
+        }
+
+        const leftLeg = document.getElementById('player-leg-left');
+        const rightLeg = document.getElementById('player-leg-right');
+        if (leftLeg && rightLeg) {
+          const angle = Math.sin(Date.now() / 100) * 22;
+          leftLeg.setAttribute('transform', `rotate(${angle}, 12, 105)`);
+          rightLeg.setAttribute('transform', `rotate(${-angle}, 12, 105)`);
+        }
+
+        const defLeftLeg = document.getElementById('def-leg-left');
+        const defRightLeg = document.getElementById('def-leg-right');
+        if (defLeftLeg && defRightLeg) {
+          const defAngle = Math.sin(Date.now() / 80) * 15;
+          defLeftLeg.setAttribute('transform', `rotate(${defAngle}, 12, 105)`);
+          defRightLeg.setAttribute('transform', `rotate(${-defAngle}, 12, 105)`);
+        }
+      }
+
+      function handleAnswerSubmission(userChoice) {
+        if (state.isShooting) return;
+        cancelAnimationFrame(state.lastAnimationFrame);
+        
+        const q = state.currentQuestion;
+        const timedOut = (userChoice === null);
+        const isCorrect = !timedOut && (userChoice === q.isTrue);
+
+        if (isCorrect) {
+          state.score++;
+          state.streak++;
+          if (state.streak > state.maxStreak) state.maxStreak = state.streak;
+        } else {
+          state.streak = 0;
+        }
+
+        state.reviewData.push({
+          hebrew: q.hebrew,
+          correctEnglish: q.correctEnglish,
+          shownEnglish: q.shownEnglish,
+          isTrue: q.isTrue,
+          userAnswer: timedOut ? 'Shotclock Violation' : (userChoice ? 'True' : 'False'),
+          status: isCorrect ? 'correct' : (timedOut ? 'timeout' : 'wrong'),
+          page: q.page
+        });
+
+        const poseDribble = document.getElementById('pose-dribble');
+        const poseShoot = document.getElementById('pose-shoot');
+        if (poseDribble && poseShoot) {
+          poseDribble.classList.add('hidden');
+          poseShoot.classList.remove('hidden');
+        }
+
+        state.isShooting = true;
+
+        if (isCorrect) {
+          state.shootOutcome = 'swish'; 
+          updateCommentatorBox('swish');
+        } else if (timedOut) {
+          state.shootOutcome = 'steal'; 
+          updateCommentatorBox('steal');
+        } else {
+          state.shootOutcome = (Math.random() < 0.5) ? 'block' : 'brick';
+          updateCommentatorBox(state.shootOutcome);
+        }
+
+        animateDetailedCourtShot();
+      }
+
+      function animateDetailedCourtShot() {
+        const ball = document.getElementById('bball-node');
+        const player = document.getElementById('player-node');
+        const defender = document.getElementById('defender-node');
+        const net = document.getElementById('net-mesh');
+        const rim = document.getElementById('court-rim');
+        
+        const startX = state.playerX + 22;
+        const startY = 82; 
+        
+        const rimX = 390; 
+        const rimY = 60;
+        
+        let targetX = rimX;
+        let targetY = rimY;
+        let peakY = 15; 
+
+        let totalFrames = 45;
+
+        if (state.shootOutcome === 'brick') {
+          targetX = rimX - 10; 
+          targetY = rimY;
+        } else if (state.shootOutcome === 'block') {
+          targetX = state.defenderX + 5;
+          targetY = 40; 
+          totalFrames = 20; 
+        } else if (state.shootOutcome === 'steal') {
+          targetX = state.defenderX;
+          targetY = 115;
+          totalFrames = 15;
+        }
+
+        let frame = 0;
+
+        function runShotFrame() {
+          frame++;
+          const t = frame / totalFrames;
+
+          const apexX = (startX + targetX) / 2;
+          const currX = (1-t)*(1-t)*startX + 2*(1-t)*t*apexX + t*t*targetX;
+          const currY = (1-t)*(1-t)*startY + 2*(1-t)*t*peakY + t*t*targetY;
+
+          if (state.shootOutcome === 'swish') {
+            const playerJumpX = startX + t * (rimX - startX - 30);
+            const playerJumpY = startY + Math.sin(t * Math.PI) * -65;
+            if (player) player.setAttribute('transform', `translate(${playerJumpX}, ${playerJumpY - 80})`);
+            
+            if (ball) {
+              ball.setAttribute('cx', playerJumpX + 22);
+              ball.setAttribute('cy', playerJumpY - 80 + 72);
+            }
+          } else {
+            if (frame < 15) {
+              const jumpY = Math.sin((frame / 15) * Math.PI) * -22;
+              if (player) player.setAttribute('transform', `translate(${state.playerX}, ${jumpY})`);
+            } else {
+              const landingT = Math.min(1, (frame - 15) / 15);
+              const descendY = -22 + landingT * 22;
+              if (player) player.setAttribute('transform', `translate(${state.playerX}, ${descendY})`);
+            }
+
+            if (ball && state.shootOutcome !== 'steal') {
+              ball.setAttribute('cx', currX);
+              ball.setAttribute('cy', currY);
+              const rotation = frame * 20;
+              ball.setAttribute('transform', `rotate(${rotation}, ${currX}, ${currY})`);
+            }
+          }
+
+          if (state.shootOutcome === 'swish') {
+            if (t > 0.4) {
+              const tPoster = (t - 0.4) / 0.6;
+              const defFallX = state.defenderX - tPoster * 40;
+              const defFallY = Math.sin(tPoster * Math.PI) * -12 + tPoster * 10;
+              const angle = tPoster * 75; 
+              if (defender) {
+                defender.setAttribute('transform', `translate(${defFallX}, ${defFallY}) rotate(${-angle}, 12, 105)`);
+              }
+            } else {
+              const defJumpY = Math.sin((t / 0.4) * Math.PI) * -16;
+              if (defender) defender.setAttribute('transform', `translate(${state.defenderX}, ${defJumpY})`);
+            }
+          } else if (state.shootOutcome === 'brick') {
+            if (frame > 5 && frame < 30) {
+              const defJumpY = Math.sin(((frame - 5) / 25) * Math.PI) * -24; 
+              if (defender) defender.setAttribute('transform', `translate(${state.defenderX}, ${defJumpY})`);
+            }
+          } else if (state.shootOutcome === 'block') {
+            const defJumpY = Math.sin((frame / totalFrames) * Math.PI) * -38;
+            if (defender) defender.setAttribute('transform', `translate(${state.defenderX}, ${defJumpY})`);
+          } else if (state.shootOutcome === 'steal') {
+            const lungeX = state.defenderX - (t * 25);
+            if (defender) defender.setAttribute('transform', `translate(${lungeX}, 5)`);
+          }
+
+          if (frame < totalFrames) {
+            requestAnimationFrame(runShotFrame);
+          } else {
+            triggerShotCollision(state.shootOutcome);
+          }
+        }
+
+        requestAnimationFrame(runShotFrame);
+      }
+
+      function triggerShotCollision(outcome) {
+        const ball = document.getElementById('bball-node');
+        const net = document.getElementById('net-mesh');
+        const rim = document.getElementById('court-rim');
+        const defender = document.getElementById('defender-node');
+
+        if (outcome === 'swish') {
+          sounds.playDunkSlam();
+          if (net) net.classList.add('animate-wiggle');
+          
+          let dropFrame = 0;
+          function dropBall() {
+            dropFrame++;
+            const bY = 60 + dropFrame * 6;
+            if (ball) ball.setAttribute('cx', 390);
+            if (ball) ball.setAttribute('cy', bY);
+            if (dropFrame < 10) requestAnimationFrame(dropBall);
+          }
+          requestAnimationFrame(dropBall);
+          showAnswerFeedback(true, false);
+
+        } else if (outcome === 'block') {
+          sounds.playBlockSlap();
+          
+          let blockFallFrame = 0;
+          const startX = state.defenderX + 5;
+          const startY = 40;
+          
+          function swatBall() {
+            blockFallFrame++;
+            const t = blockFallFrame / 20;
+            const bX = startX - t * 140;
+            const bY = startY + t * 90 - Math.sin(t * Math.PI) * 15;
+            if (ball) {
+              ball.setAttribute('cx', bX);
+              ball.setAttribute('cy', bY);
+            }
+            if (blockFallFrame < 20) requestAnimationFrame(swatBall);
+          }
+          requestAnimationFrame(swatBall);
+          showAnswerFeedback(false, false);
+
+        } else if (outcome === 'brick') {
+          sounds.playClank();
+          if (rim) {
+            rim.setAttribute('stroke', '#ef4444');
+            setTimeout(() => rim.setAttribute('stroke', '#f97316'), 200);
+          }
+
+          let brickFrame = 0;
+          function bounceBrick() {
+            brickFrame++;
+            const t = brickFrame / 22;
+            const bX = 380 - t * 60;
+            const bY = 60 + Math.sin(t * Math.PI) * -40 + t * 75;
+            if (ball) {
+              ball.setAttribute('cx', bX);
+              ball.setAttribute('cy', bY);
+            }
+            if (brickFrame < 22) requestAnimationFrame(bounceBrick);
+          }
+          requestAnimationFrame(bounceBrick);
+          showAnswerFeedback(false, false);
+
+        } else if (outcome === 'steal') {
+          sounds.playTone(450, 'sawtooth', 0.15, 0.35);
+          if (ball) ball.setAttribute('opacity', '0');
+          
+          let stealFrame = 0;
+          const startDefX = state.defenderX;
+          function defenderDribblesAway() {
+            stealFrame++;
+            const currentDefX = startDefX - (stealFrame * 8);
+            if (defender) defender.setAttribute('transform', `translate(${currentDefX}, 5)`);
+            if (stealFrame < 30) requestAnimationFrame(defenderDribblesAway);
+          }
+          requestAnimationFrame(defenderDribblesAway);
+          showAnswerFeedback(false, true);
+        }
+      }
+
+      function showAnswerFeedback(isCorrect, timedOut) {
+        sounds.playWhistle(); 
+        const tBtn = document.getElementById('btn-true');
+        const fBtn = document.getElementById('btn-false');
+        if (tBtn && fBtn) {
+          tBtn.disabled = true;
+          fBtn.disabled = true;
+        }
+
+        const indicator = document.getElementById('court-announcer');
+        if (indicator) {
+          indicator.classList.remove('hidden');
+          if (isCorrect) {
+            indicator.innerHTML = `
+              <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 p-4 rounded-2xl text-center">
+                <span class="text-xs font-black uppercase tracking-[0.2em] block mb-0.5 text-emerald-500">🔥 SWISH DUNK!</span>
+                <span class="text-sm font-extrabold">Rabba posterized Abaye! A rishonim-level dunk oyf him!</span>
+              </div>
+            `;
+          } else {
+            const headerMsg = timedOut ? "🚨 SHOT CLOCK VIOLATION!" : "💥 REJECTED BY ABAYE!";
+            let breakdownText = "";
+            
+            if (timedOut) {
+              breakdownText = "Held the ball past the 5.0-second buzzer! Abaye stripped it clean.";
+            } else {
+              breakdownText = `The defender swatted it away! "${state.currentQuestion.hebrew}" standard translation is "${state.currentQuestion.correctEnglish}"`;
+            }
+
+            indicator.innerHTML = `
+              <div class="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-2xl text-center">
+                <span class="text-xs font-black uppercase tracking-[0.2em] block mb-0.5 text-red-500">${headerMsg}</span>
+                <span class="text-xs font-bold leading-relaxed block text-slate-300">${breakdownText}</span>
+              </div>
+            `;
+          }
+        }
+
+        if (!timedOut) {
+          const selectedBtn = state.currentQuestion.isTrue ? tBtn : fBtn;
+          if (isCorrect) {
+            selectedBtn?.classList.add('bg-[#FDB927]', 'text-slate-950', 'border-[#FDB927]', 'scale-105');
+          } else {
+            const wrongBtn = state.currentQuestion.isTrue ? fBtn : tBtn;
+            wrongBtn?.classList.add('bg-red-500', 'text-white', 'border-red-400', 'scale-105');
+          }
+        }
+
+        setTimeout(() => {
+          loadQuestion(state.currentIndex + 1);
+        }, isCorrect ? 1500 : 3500); 
+      }
+
+      function updateCommentatorBox(type) {
+        const pool = commentaries[type];
+        const randomQuote = pool[Math.floor(Math.random() * pool.length)];
+        
+        const commQuote = document.getElementById('comm-quote');
+        const commSpeaker = document.getElementById('comm-speaker');
+        const commAvatar = document.getElementById('comm-avatar');
+        
+        const isYitzchok = Math.random() < 0.5;
+        
+        if (commQuote) {
+          commQuote.innerText = `"${randomQuote}"`;
+        }
+        if (commSpeaker) {
+          commSpeaker.innerText = isYitzchok ? "YITZCHOK (YSN)" : "MOISHE (YSN)";
+        }
+        if (commAvatar) {
+          commAvatar.classList.toggle('bg-purple-600', isYitzchok);
+          commAvatar.classList.toggle('bg-teal-600', !isYitzchok);
+          commAvatar.innerText = isYitzchok ? "🎙️ Y" : "🎧 M";
+        }
+      }
+
+      function endGame() {
+        state.phase = 'results';
+        renderResultsScreen();
+      }
+
+      function renderWelcomeScreen() {
+        const card = document.getElementById('game-card');
+        card.innerHTML = `
+          <div class="animate-pop-in flex flex-col justify-between h-full space-y-8">
+            <div class="text-center py-4">
+              <div class="inline-flex items-center justify-center bg-[#552583]/30 border border-[#FDB927]/40 px-4 py-1.5 rounded-full text-xs text-[#FDB927] font-black mb-4 tracking-widest uppercase">
+                🎙️ Yeshiva Sports Network • Staples Arena
+              </div>
+              <h2 class="text-4xl md:text-5xl font-black text-white tracking-wider leading-none mb-4 uppercase">
+                THE SHOT CLOCK DUNKER
+              </h2>
+              <p class="text-purple-200/80 text-sm max-w-lg mx-auto leading-relaxed font-medium">
+                Dribble down the floor as Lakers franchise athlete <strong class="text-[#FDB927]">Rabba</strong>, posterize Bulls lockdown specialist <strong class="text-red-400">Abaye</strong>, and hear the YSN commentators scream in heavy Ashkenazic accent! You have <strong class="text-[#FDB927]">5.0 seconds</strong> on the shot clock!
+              </p>
+            </div>
+
+            <!-- Rules Grid -->
+            <div class="bg-slate-950 border border-purple-900/60 rounded-2xl p-5 text-xs text-purple-200 space-y-3.5 text-left max-w-xl mx-auto w-full shadow-inner">
+              <div class="flex items-start gap-3">
+                <span class="w-5 h-5 flex-shrink-0 rounded-full bg-[#552583] border border-[#FDB927]/30 flex items-center justify-center text-[10px] font-black text-[#FDB927]">1</span>
+                <p class="leading-relaxed">Translate the Hebrew vocabulary term in midcourt. If the translation matches, tap <strong class="text-[#FDB927]">TRUE (Dunk on Abaye)</strong>. If fake, tap <strong class="text-purple-400">FALSE (Block Abaye)</strong>.</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="w-5 h-5 flex-shrink-0 rounded-full bg-[#552583] border border-[#FDB927]/30 flex items-center justify-center text-[10px] font-black text-[#FDB927]">2</span>
+                <p class="leading-relaxed">Correct answers trigger Rabba taking off and slamming the ball over Abaye, knocking him to the hardwood!</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="w-5 h-5 flex-shrink-0 rounded-full bg-[#552583] border border-[#FDB927]/30 flex items-center justify-center text-[10px] font-black text-[#FDB927]">3</span>
+                <p class="leading-relaxed">Keep the scoring streak hot to hear Moishe and Yitzchok scream in disbelief!</p>
+              </div>
+            </div>
+
+            <button onclick="startBlitzGame()" class="w-full bg-gradient-to-r from-[#FDB927] to-[#e6a315] hover:from-[#ffcf56] hover:to-[#f0b224] text-slate-950 font-black py-4.5 rounded-2xl shadow-xl shadow-[#FDB927]/10 hover:scale-[1.01] active:scale-[0.99] transition-all text-xl tracking-widest uppercase border border-white/20">
+              START THE TIP-OFF • GOAT WARS ⚡
+            </button>
+          </div>
+        `;
+      }
+
+      function renderQuestionScreen() {
+        const card = document.getElementById('game-card');
+        const q = state.currentQuestion;
+        const heatingUp = state.streak >= 4;
+
+        card.innerHTML = `
+          <div class="animate-pop-in flex flex-col justify-between h-full space-y-6">
+            
+            <!-- scoreboard header -->
+            <div class="bg-slate-900 border border-purple-900/60 rounded-2xl p-4 flex justify-between items-center relative overflow-hidden shadow-inner">
+              <div class="flex gap-4 items-center">
+                <div class="text-left">
+                  <p class="text-[9px] font-black text-purple-400 uppercase tracking-widest">RABBA (LAL)</p>
+                  <p class="text-2xl font-black text-white font-led tracking-widest">${state.score} <span class="text-xs text-purple-400">PTS</span></p>
+                </div>
+                <div class="h-8 w-[1px] bg-purple-950"></div>
+                <div>
+                  <p class="text-[9px] font-black text-purple-400 uppercase tracking-widest">ABAYE (CHI)</p>
+                  <p class="text-xs font-extrabold text-red-500 font-led">DEFENSE ACTIVE</p>
+                </div>
+              </div>
+
+              <!-- Shot clock -->
+              <div id="shot-clock-display" class="flex flex-col items-center bg-black border border-purple-950/80 px-4 py-2 rounded-xl min-w-[90px] transition-all shadow-md">
+                <span class="text-[8px] font-black text-rose-500 uppercase tracking-widest block mb-0.5">SHOT CLOCK</span>
+                <span id="timer-num" class="text-3xl font-led font-black text-red-500 tracking-wider">5.0</span>
+              </div>
+
+              <!-- Streak badge -->
+              <div class="flex items-center gap-1.5 px-3 py-2 rounded-xl transition-all ${
+                heatingUp 
+                  ? 'streak-gold-fire bg-yellow-500/10 text-[#FDB927]' 
+                  : 'bg-black/40 text-slate-400 border border-slate-800'
+              }">
+                <span class="text-[9px] font-black uppercase tracking-widest">${heatingUp ? '🔥 ZONE ACTIVE:' : 'STREAK:'}</span>
+                <span class="font-black text-sm text-white font-led">${state.streak}</span>
+              </div>
+            </div>
+
+            <!-- LED countdown visual bar -->
+            <div class="space-y-1">
+              <div class="w-full h-2 bg-slate-950 rounded-full p-0.5 overflow-hidden border border-slate-900">
+                <div id="timer-bar" class="h-full bg-[#FDB927] rounded-full progress-bar-transition" style="width: 100%"></div>
+              </div>
+            </div>
+
+            <!-- Hebrew word panel -->
+            <div class="text-center py-2 relative">
+              <span class="text-xs text-purple-400 font-extrabold uppercase tracking-[0.25em] block mb-2">Identify Translation</span>
+              <h3 class="text-5xl md:text-6xl font-hebrew font-black tracking-wide text-white leading-tight" dir="rtl">
+                ${q.hebrew}
+              </h3>
+            </div>
+
+            <!-- Interactive Basketball Court Viewport Layer -->
+            <div class="relative bg-slate-950/70 border-2 border-purple-950 rounded-2xl overflow-hidden p-2 shadow-inner">
+               <svg class="w-full h-34 relative overflow-hidden" viewBox="0 0 500 145" id="court-diagram-svg">
+                  <defs>
+                     <linearGradient id="skinRabba" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ea580c" />
+                        <stop offset="60%" stop-color="#c2410c" />
+                        <stop offset="100%" stop-color="#7c2d12" />
+                     </linearGradient>
+                     <linearGradient id="skinAbaye" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#854d0e" />
+                        <stop offset="70%" stop-color="#451a03" />
+                        <stop offset="100%" stop-color="#1e1b4b" />
+                     </linearGradient>
+                     <linearGradient id="lakersGoldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#ffdf5d" />
+                        <stop offset="50%" stop-color="#fdb927" />
+                        <stop offset="100%" stop-color="#d97706" />
+                     </linearGradient>
+                     <linearGradient id="bullsRedGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#ef4444" />
+                        <stop offset="50%" stop-color="#dc2626" />
+                        <stop offset="100%" stop-color="#991b1b" />
+                     </linearGradient>
+                     <radialGradient id="ballGrad" cx="35%" cy="35%" r="65%">
+                        <stop offset="0%" stop-color="#fdba74" />
+                        <stop offset="50%" stop-color="#f97316" />
+                        <stop offset="90%" stop-color="#c2410c" />
+                        <stop offset="100%" stop-color="#7c2d12" />
+                     </radialGradient>
+                  </defs>
+
+                  <path d="M 0,145 A 130,130 0 0,0 130,10" fill="none" stroke="#552583" stroke-width="2" class="opacity-20" />
+                  <line x1="10" y1="135" x2="490" y2="135" stroke="#FDB927" stroke-width="2" class="opacity-30" />
+                  
+                  <g id="court-particles"></g>
+
+                  <!-- Backboard Setup -->
+                  <rect x="440" y="25" width="5" height="50" rx="1" fill="#1e293b" stroke="#64748b" stroke-width="1.5" />
+                  <rect x="440" y="40" width="2" height="20" fill="none" stroke="#ef4444" stroke-width="1.5" id="backboard-led" />
+                  
+                  <!-- Rim Bracket & Net Setup -->
+                  <ellipse cx="418" cy="50" rx="14" ry="4.5" fill="none" stroke="#f97316" stroke-width="2.5" id="court-rim" />
+                  <path d="M 404,50 L 409,74 L 427,74 L 432,50 Z" fill="none" stroke="#f8fafc" stroke-width="1.5" stroke-dasharray="3 2" id="net-mesh" />
+                  
+                  <!-- HUMAN PLAYER: RABBA -->
+                  <g id="player-node" class="transition-transform duration-75">
+                     <path d="M 4,105 L 18,105 L 20,120 L 13,120 L 12,112 L 10,112 L 9,120 L 2,120 Z" fill="#552583" />
+                     <path d="M 4,105 L 18,105 L 20,120 L 13,120 L 12,112 L 10,112 L 9,120 L 2,120 Z" fill="none" stroke="#FDB927" stroke-width="0.7" />
+                     <path d="M 7,105 L 7,114 M 15,105 L 16,116" stroke="#4a1d7c" stroke-width="1" /> 
+
+                     <rect x="3" y="85" width="18" height="22" fill="url(#lakersGoldGrad)" rx="3" />
+                     <path d="M 6,85 Q 12,90 18,85" fill="none" stroke="#552583" stroke-width="1.5" /> 
+                     <path d="M 3,92 Q 12,97 21,92" stroke="#eab308" stroke-width="1" fill="none" /> 
+                     
+                     <text x="8" y="100" font-family="'Plus Jakarta Sans'" font-weight="900" font-size="10" fill="#552583">ר</text>
+                     <text x="8.5" y="100.5" font-family="'Plus Jakarta Sans'" font-weight="900" font-size="10" fill="#ffffff" opacity="0.8">ר</text>
+                     
+                     <circle cx="12" cy="74" r="6.5" fill="url(#skinRabba)" />
+                     <path d="M 6,70 C 8,66 16,66 18,70 L 19,72 L 5,72 Z" fill="#27272a" /> 
+                     <rect x="5.5" y="71" width="13" height="2.5" fill="#1e293b" /> 
+                     <path d="M 6.5,77 Q 12,81 17.5,77 L 12,81 Z" fill="#27272a" />
+                     
+                     <ellipse cx="9.5" cy="74" rx="1" ry="0.6" fill="#ffffff" />
+                     <circle cx="9.5" cy="74" r="0.5" fill="#000000" />
+                     <ellipse cx="14.5" cy="74" rx="1" ry="0.6" fill="#ffffff" />
+                     <circle cx="14.5" cy="74" r="0.5" fill="#000000" />
+
+                     <g id="player-legs">
+                       <line id="player-leg-left" x1="8" y1="118" x2="4" y2="133" stroke="url(#skinRabba)" stroke-width="4.5" stroke-linecap="round" />
+                       <line id="player-leg-right" x1="14" y1="118" x2="18" y2="133" stroke="url(#skinRabba)" stroke-width="4.5" stroke-linecap="round" />
+                       <rect x="1.5" y="129" width="6" height="5" fill="#552583" rx="1.5" />
+                       <rect x="1.5" y="132" width="6" height="2" fill="#fdb927" /> 
+                       <rect x="15.5" y="129" width="6" height="5" fill="#552583" rx="1.5" />
+                       <rect x="15.5" y="132" width="6" height="2" fill="#fdb927" />
+                     </g>
+
+                     <g id="pose-dribble">
+                        <path d="M 18,92 C 24,96 26,102 22,108" fill="none" stroke="url(#skinRabba)" stroke-width="3" stroke-linecap="round" />
+                        <circle cx="22" cy="108" r="2" fill="url(#skinRabba)" />
+                     </g>
+                     <g id="pose-shoot" class="hidden">
+                        <path d="M 18,87 C 24,73 28,73 31,76" fill="none" stroke="url(#skinRabba)" stroke-width="3.5" stroke-linecap="round" />
+                        <path d="M 4,87 C 8,69 20,68 25,70" fill="none" stroke="url(#skinRabba)" stroke-width="3" stroke-linecap="round" />
+                     </g>
+                  </g>
+
+                  <!-- HUMAN DEFENDER: ABAYE -->
+                  <g id="defender-node" class="transition-transform duration-75">
+                     <path d="M 4,105 L 18,105 L 20,120 L 13,120 L 12,112 L 10,112 L 9,120 L 2,120 Z" fill="#111827" />
+                     <path d="M 4,105 L 18,105 L 20,120 L 13,120 L 12,112 L 10,112 L 9,120 L 2,120 Z" fill="none" stroke="#dc2626" stroke-width="0.7" />
+                     <rect x="3" y="85" width="18" height="22" fill="url(#bullsRedGrad)" rx="3" />
+                     <text x="6.5" y="100" font-family="'Plus Jakarta Sans'" font-weight="900" font-size="10" fill="#ffffff">א</text>
+                     <circle cx="12" cy="74" r="6.5" fill="url(#skinAbaye)" />
+                     
+                     <ellipse cx="9.5" cy="74" rx="1" ry="0.6" fill="#ffffff" />
+                     <circle cx="9.5" cy="74" r="0.5" fill="#1e1b4b" />
+                     <ellipse cx="14.5" cy="74" rx="1" ry="0.6" fill="#ffffff" />
+                     <circle cx="14.5" cy="74" r="0.5" fill="#1e1b4b" />
+
+                     <path d="M 1,92 C -7,82 -9,75 -11,68" fill="none" stroke="url(#skinAbaye)" stroke-width="3.5" stroke-linecap="round" />
+                     <path d="M 17,92 C 25,82 27,75 29,62" fill="none" stroke="url(#skinAbaye)" stroke-width="3.5" stroke-linecap="round" />
+
+                     <g id="defender-legs">
+                        <line id="def-leg-left" x1="8" y1="118" x2="5" y2="133" stroke="url(#skinAbaye)" stroke-width="4.5" stroke-linecap="round" />
+                        <line id="def-leg-right" x1="14" y1="118" x2="17" y2="133" stroke="url(#skinAbaye)" stroke-width="4.5" stroke-linecap="round" />
+                        <rect x="2.5" y="129" width="6" height="5" fill="#dc2626" rx="1.5" />
+                        <rect x="14.5" y="129" width="6" height="5" fill="#dc2626" rx="1.5" />
+                     </g>
+                  </g>
+
+                  <!-- Dynamic 3D Basketball -->
+                  <circle cx="50" cy="115" r="8" fill="url(#ballGrad)" stroke="#1e293b" stroke-width="0.8" id="bball-node" />
+                  <path d="M 43,113 C 48,111 53,111 57,113 M 43,117 C 48,119 53,119 57,117" stroke="#1e293b" stroke-width="0.6" fill="none" opacity="0.6" />
+                  <ellipse cx="48" cy="111" rx="2.5" ry="1.5" fill="#ffffff" opacity="0.25" transform="rotate(-15, 48, 111)" />
+               </svg>
+            </div>
+
+            <!-- Commentator Dialogue Box -->
+            <div class="bg-slate-900 border border-purple-900/60 rounded-2xl p-4 flex gap-4 items-center">
+              <div id="comm-avatar" class="w-12 h-12 flex-shrink-0 rounded-xl bg-purple-600 font-extrabold flex items-center justify-center text-white text-lg transition-colors border border-purple-400">
+                🎙️ Y
+              </div>
+              <div class="flex-grow text-left">
+                <span id="comm-speaker" class="text-[9px] font-black text-[#FDB927] uppercase tracking-widest block mb-0.5">YITZCHOK (YSN)</span>
+                <p id="comm-quote" class="text-xs font-semibold text-slate-300 italic">"Oy! Rabba has the ball un drives past midcourt!"</p>
+              </div>
+            </div>
+
+            <!-- Defenses statement card -->
+            <div class="bg-[#552583]/15 border border-[#552583]/40 rounded-2xl p-4 text-center min-h-[85px] flex items-center justify-center shadow-inner">
+              <p class="text-sm md:text-base font-bold leading-relaxed text-purple-100">
+                Claim: <strong class="text-[#FDB927] font-extrabold" id="claim-text">"${q.shownEnglish}"</strong>
+              </p>
+            </div>
+
+            <!-- Jumbotron announcer box placeholder -->
+            <div id="court-announcer" class="hidden animate-pop-in"></div>
+
+            <!-- Hardwood Shot actions -->
+            <div class="grid grid-cols-2 gap-4">
+              <button id="btn-false" onclick="handleAnswerSubmission(false)" class="bg-[#552583] hover:bg-[#68309e] border-2 border-[#552583] text-purple-200 font-extrabold py-4 rounded-2xl flex flex-col items-center justify-center transition-all hover:scale-[1.01] active:scale-[0.99] group shadow-md hover:border-[#FDB927]">
+                <span class="text-xl group-hover:scale-110 transition-transform">❌</span>
+                <span class="text-[10px] uppercase tracking-widest font-black mt-1">FALSE (OUT OF BOUNDS)</span>
+              </button>
+              
+              <button id="btn-true" onclick="handleAnswerSubmission(true)" class="bg-[#FDB927] hover:bg-[#ffcf56] border-2 border-[#FDB927] text-[#552583] font-extrabold py-4 rounded-2xl flex flex-col items-center justify-center transition-all hover:scale-[1.01] active:scale-[0.99] group shadow-md border-transparent">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏀</span>
+                <span class="text-[10px] uppercase tracking-widest font-black mt-1">TRUE (BUCKET!)</span>
+              </button>
+            </div>
+
+          </div>
+        `;
+      }
+
+      function renderResultsScreen() {
+        const card = document.getElementById('game-card');
+        const pct = Math.round((state.score / state.questionsList.length) * 100);
+        
+        let draftReport = "Bench warmer status. Back to the practice court! 👟";
+        let tierColor = "text-rose-500";
+        if (pct >= 90) {
+          draftReport = "UNDISPUTED NBA GOAT CHAMPION! Halakhah follows Rabba! 🏆";
+          tierColor = "text-[#FDB927]";
+        } else if (pct >= 70) {
+          draftReport = "PLAYOFFS CHIEF STARTER! Heavy posterization on Abaye. 🏀";
+          tierColor = "text-emerald-400";
+        }
+
+        const logHTML = state.reviewData.map((item, i) => {
+          const ok = item.status === 'correct';
+          let playType = "SWISH DUNK! Posterized Abaye";
+          let badgeColor = "text-emerald-400 bg-emerald-500/10 border-emerald-500/20";
+          
+          if (item.status === 'wrong') {
+            playType = "BRICK! Contested by Abaye";
+            badgeColor = "text-rose-400 bg-rose-500/10 border-rose-500/20";
+          } else if (item.status === 'timeout') {
+            playType = "TURNOVER! Abaye steals the rock";
+            badgeColor = "text-rose-500 bg-red-500/10 border-red-500/20";
+          }
+
+          return `
+            <div class="p-4 border-b border-purple-950 flex justify-between items-start text-xs bg-black/20 hover:bg-black/40 transition-colors last:border-0">
+              <div class="flex-1 mr-4">
+                <div class="flex items-center gap-2 mb-1.5">
+                  <span class="font-hebrew font-black text-white text-base" dir="rtl">${item.hebrew}</span>
+                  <span class="text-[8px] font-black bg-purple-950/80 border border-purple-900/50 text-purple-300 px-2 py-0.5 rounded">Pg ${item.page}</span>
+                </div>
+                <p class="text-slate-400 leading-relaxed"><strong class="text-purple-400 font-bold">Standard Meaning:</strong> ${item.correctEnglish}</p>
+                ${!ok ? `<p class="text-rose-400 mt-1.5"><strong class="text-rose-600">The Defender claimed:</strong> "${item.shownEnglish}"</p>` : ''}
+              </div>
+              <div class="text-right flex-shrink-0 mt-1">
+                <span class="${badgeColor} px-2.5 py-1 rounded-xl border text-[8px] font-black uppercase tracking-wider block">
+                  ${playType}
+                </span>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        card.innerHTML = `
+          <div class="animate-pop-in flex flex-col justify-between h-full space-y-6">
+            
+            <div class="text-center">
+              <span class="text-[#FDB927] text-[10px] font-black uppercase tracking-[0.3em] block mb-2">Final Whistle Blown</span>
+              <h2 class="text-3xl font-black text-white mb-1 uppercase tracking-wider">Playoff Series Box Score</h2>
+              <p class="text-xs font-extrabold text-purple-300 uppercase tracking-widest">Eilu Metziot Pages 6, 7 & 21b</p>
+            </div>
+
+            <!-- Box Score Metrics -->
+            <div class="grid grid-cols-3 gap-3">
+              <div class="bg-black/60 border border-purple-950 p-4 rounded-2xl text-center">
+                <p class="text-[9px] font-black text-purple-400 uppercase tracking-wider mb-1">Rabba FGM</p>
+                <p class="text-2xl font-black text-white font-led">${state.score}<span class="text-sm text-purple-500">/${state.questionsList.length}</span></p>
+              </div>
+              <div class="bg-black/60 border border-purple-950 p-4 rounded-2xl text-center">
+                <p class="text-[9px] font-black text-purple-400 uppercase tracking-wider mb-1">Scoring %</p>
+                <p class="text-2xl font-black text-[#FDB927] font-led">${pct}%</p>
+              </div>
+              <div class="bg-black/60 border border-purple-950 p-4 rounded-2xl text-center">
+                <p class="text-[9px] font-black text-purple-400 uppercase tracking-wider mb-1">MVP Streak</p>
+                <p class="text-2xl font-black text-teal-300 font-led">🔥 ${state.maxStreak}</p>
+              </div>
+            </div>
+
+            <!-- Draft Analysis Grade -->
+            <div class="bg-[#552583]/10 border border-purple-950/80 p-4.5 rounded-2xl text-center">
+              <span class="text-[8px] font-black text-purple-400 uppercase tracking-widest block mb-1">MVP REPORT CARD</span>
+              <p class="text-base font-black ${tierColor} uppercase tracking-wider">${draftReport}</p>
+            </div>
+
+            <!-- Play-by-Play Log -->
+            <div class="border-2 border-[#552583] rounded-2xl overflow-hidden bg-black/40">
+              <div class="bg-[#552583]/20 px-4 py-2.5 text-[10px] font-black text-[#FDB927] uppercase tracking-widest border-b border-[#552583] flex justify-between">
+                <span>Play-by-Play Log</span>
+                <span>Hardwood Court: Staples Center</span>
+              </div>
+              <div class="max-h-56 overflow-y-auto custom-scrollbar" id="log-scroll-view">
+                ${logHTML}
+              </div>
+            </div>
+
+            <button onclick="startBlitzGame()" class="w-full bg-gradient-to-r from-[#FDB927] to-[#e6a315] hover:from-[#ffcf56] hover:to-[#f0b224] text-slate-950 font-black py-4 rounded-2xl shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all text-base tracking-widest uppercase border border-white/10">
+              Play Next Game ⚡
+            </button>
+          </div>
+        `;
+      }
+
+      function setupGlobalKeyListeners() {
+        document.addEventListener('keydown', (e) => {
+          if (state.phase !== 'playing') return;
+          if (state.isShooting) return;
+
+          const key = e.key.toLowerCase();
+          
+          if (key === 'arrowleft' || key === 'f') {
+            const btn = document.getElementById('btn-false');
+            if (btn && !btn.disabled) btn.click();
+          } else if (key === 'arrowright' || key === 't' || key === 'j') {
+            const btn = document.getElementById('btn-true');
+            if (btn && !btn.disabled) btn.click();
+          }
+        });
+      }
+
+      window.onload = initApp;
+    </script>
+  </body>
+</html>
